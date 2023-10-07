@@ -10,6 +10,10 @@ header-includes:
 urlcolor: blue  
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ## Questions about Cars from a Sample Data.
 
 In this I used ...
@@ -17,30 +21,70 @@ In this I used ...
 
 \newpage
 
-## What is the relation between Horsepower and Acceleration.
-
-I wanted to check if the acceleration time depends on the horsepower of the engine.
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Q#01 - Does more horsepower decreases the acceleration time?
+Looking at the graph we can notice there is a relation between hp and acceleration. The more hp the less time accelerating. Also the correlation coefficient represent a pretty strong linear relation.
+```{r, echo=TRUE,warning=FALSE,message=FALSE, eval=TRUE}
+library(ggplot2)
+library(ISLR)
+library(dplyr)
+hp_acce <- select(Auto, horsepower, acceleration)
+ggplot(hp_acce, aes(x = horsepower, y = acceleration)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Relationship between Horsepower and Acceleration",
+       x = "Horsepower",
+       y = "Acceleration")
+cor(Auto$horsepower, Auto$acceleration)
 ```
 
-## R Markdown
+\newpage
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Q#02 - Does the mpg depends on the amount of cylinders?
+The graph shows that the right amount of cylinder can improve the mpg, Four cylinders been the most efficient miles per gallons. The p-value from the ANOVA test shows there's a statistically significant difference in the mean mpg across different cylinders groups.
+```{r, echo=TRUE,warning=FALSE,message=FALSE, eval=TRUE}
+library(ggplot2)
+library(ISLR)
+library(dplyr)
+mpg_cyl <- select(Auto, mpg, cylinders)
+ggplot(mpg_cyl, aes(x = as.factor(cylinders), y = mpg)) +
+  geom_boxplot() +
+  labs(title = "Relationship between MPG and Cylinders",
+       x = "Number of Cylinders",
+       y = "MPG") +
+  theme_minimal()
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+anova_result <- aov(mpg ~ as.factor(cylinders), data = Auto)
+summary(anova_result)
 ```
 
-## Including Plots
+\newpage
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Q#03 - Is the amount of cylinders related to the origin?
+We can notice from the graph the distribution of car by number of cylinders. Orange being American, pink European, and red Japanese. The p-value indicates that the two variables are not independent and that there is a significant association between cylinders and origin.
+```{r, echo=TRUE,warning=FALSE,message=FALSE, eval=TRUE}
+library(ggplot2)
+library(ISLR)
+library(dplyr)
+library(vcd)
+table_cyl_origin <- table(Auto$cylinders, Auto$origin)
+print(table_cyl_origin)
+mosaicplot(table_cyl_origin, main="Mosaic Plot of Cylinders and Origin", xlab="Cylinders", ylab="Origin", col=c("orange", "pink", "red"))
+chi_sq_test <- chisq.test(table_cyl_origin)
+print(chi_sq_test)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+\newpage
+
+## Q#04 - Is there a relation between the displacement and weight?
+```{r, echo=TRUE,warning=FALSE,message=FALSE, eval=TRUE}
+library(ggplot2)
+library(ISLR)
+library(dplyr)
+ggplot(Auto, aes(x = displacement, y = weight)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Relationship between Displacement and Weight",
+       x = "Displacement",
+       y = "Weight") +
+  theme_minimal()
+```

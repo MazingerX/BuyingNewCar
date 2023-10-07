@@ -114,7 +114,7 @@
 
 \title{Assigment 2}
 \author{Luis Hinostroza}
-\date{2023-10-05}
+\date{2023-10-06}
 
 \begin{document}
 \maketitle
@@ -127,48 +127,137 @@ In this I used \ldots{}
 
 \newpage
 
-\hypertarget{what-is-the-relation-between-horsepower-and-acceleration.}{%
-\subsection{What is the relation between Horsepower and
-Acceleration.}\label{what-is-the-relation-between-horsepower-and-acceleration.}}
+\hypertarget{q01---does-more-horsepower-decreases-the-acceleration-time}{%
+\subsection{Q\#01 - Does more horsepower decreases the acceleration
+time?}\label{q01---does-more-horsepower-decreases-the-acceleration-time}}
 
-I wanted to check if the acceleration time depends on the horsepower of
-the engine.
-
-\hypertarget{r-markdown}{%
-\subsection{R Markdown}\label{r-markdown}}
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see \url{http://rmarkdown.rstudio.com}.
-
-When you click the \textbf{Knit} button a document will be generated
-that includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+Looking at the graph we can notice there is a relation between hp and
+acceleration. The more hp the less time accelerating. Also the
+correlation coefficient represent a pretty strong linear relation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(cars)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(ISLR)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\NormalTok{hp\_acce }\OtherTok{\textless{}{-}} \FunctionTok{select}\NormalTok{(Auto, horsepower, acceleration)}
+\FunctionTok{ggplot}\NormalTok{(hp\_acce, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ horsepower, }\AttributeTok{y =}\NormalTok{ acceleration)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Relationship between Horsepower and Acceleration"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Horsepower"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Acceleration"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{QuestionCar_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(Auto}\SpecialCharTok{$}\NormalTok{horsepower, Auto}\SpecialCharTok{$}\NormalTok{acceleration)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
+## [1] -0.6891955
 \end{verbatim}
 
-\hypertarget{including-plots}{%
-\subsection{Including Plots}\label{including-plots}}
+\newpage
 
-You can also embed plots, for example:
+\hypertarget{q02---does-the-mpg-depends-by-the-amount-of-cylinders}{%
+\subsection{Q\#02 - Does the mpg depends by the amount of
+cylinders?}\label{q02---does-the-mpg-depends-by-the-amount-of-cylinders}}
 
-\includegraphics{QuestionCar_files/figure-latex/pressure-1.pdf}
+The graph shows that the right amount of cylinder can improve the mpg,
+Four cylinders been the most efficient miles per gallons. The p-value
+from the ANOVA test shows there's a statistically significant difference
+in the mean mpg across different cylinders groups.
 
-Note that the \texttt{echo\ =\ FALSE} parameter was added to the code
-chunk to prevent printing of the R code that generated the plot.
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(ISLR)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\NormalTok{mpg\_cyl }\OtherTok{\textless{}{-}} \FunctionTok{select}\NormalTok{(Auto, mpg, cylinders)}
+\FunctionTok{ggplot}\NormalTok{(mpg\_cyl, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.factor}\NormalTok{(cylinders), }\AttributeTok{y =}\NormalTok{ mpg)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Relationship between MPG and Cylinders"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Number of Cylinders"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"MPG"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{QuestionCar_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anova\_result }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(mpg }\SpecialCharTok{\textasciitilde{}} \FunctionTok{as.factor}\NormalTok{(cylinders), }\AttributeTok{data =}\NormalTok{ Auto)}
+\FunctionTok{summary}\NormalTok{(anova\_result)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                       Df Sum Sq Mean Sq F value Pr(>F)    
+## as.factor(cylinders)   4  15275    3819     173 <2e-16 ***
+## Residuals            387   8544      22                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\newpage
+
+\hypertarget{q03---is-the-amount-of-cylinders-related-to-the-origin}{%
+\subsection{Q\#03 - Is the amount of cylinders related to the
+origin?}\label{q03---is-the-amount-of-cylinders-related-to-the-origin}}
+
+We can notice from the graph the distribution of car by number of
+cylinders. Orange being form USA, pink from EU, and red from Japan. The
+p-value indicates that the two variables are not independent and that
+there is a significant association between cylinders and origin.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(ISLR)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(vcd)}
+\NormalTok{table\_cyl\_origin }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(Auto}\SpecialCharTok{$}\NormalTok{cylinders, Auto}\SpecialCharTok{$}\NormalTok{origin)}
+\FunctionTok{print}\NormalTok{(table\_cyl\_origin)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    
+##       1   2   3
+##   3   0   0   4
+##   4  69  61  69
+##   5   0   3   0
+##   6  73   4   6
+##   8 103   0   0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mosaicplot}\NormalTok{(table\_cyl\_origin, }\AttributeTok{main=}\StringTok{"Mosaic Plot of Cylinders and Origin"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"Cylinders"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Origin"}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"orange"}\NormalTok{, }\StringTok{"pink"}\NormalTok{, }\StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{QuestionCar_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{chi\_sq\_test }\OtherTok{\textless{}{-}} \FunctionTok{chisq.test}\NormalTok{(table\_cyl\_origin)}
+\FunctionTok{print}\NormalTok{(chi\_sq\_test)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  table_cyl_origin
+## X-squared = 180.72, df = 8, p-value < 2.2e-16
+\end{verbatim}
 
 \end{document}
